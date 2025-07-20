@@ -1,15 +1,16 @@
 {
   "name": "easytrip",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
+  "homepage": "https://Gvenkatanarasimha05.github.io/EasyTrip",
   "type": "module",
-  "ho"
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "deploy" : "",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "lint": "eslint ."
   },
   "dependencies": {
     "date-fns": "^3.3.1",
