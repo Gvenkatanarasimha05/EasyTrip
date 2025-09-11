@@ -1,7 +1,7 @@
 # Node modules
-node_modules/
+
 client/node_modules/
-server/node_modules/
+
 
 # Build output
 dist/
@@ -19,7 +19,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Environment files
-.env
+
 *.local
 
 # Editor directories and files
