@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(helmet());
-import cors from 'cors';
+
 
 app.use(cors({
   origin: ['https://easytrip11.vercel.app', 'http://localhost:3001'],
