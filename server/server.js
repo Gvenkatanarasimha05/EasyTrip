@@ -63,6 +63,7 @@ if (process.env.NODE_ENV !== 'production') {
     console.log(`🚀 EasyTrip backend running at http://localhost:${PORT}`);
   });
 }
+export default app;
 
 
 
