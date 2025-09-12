@@ -1,15 +1,17 @@
+// server/server.js
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { connectDatabase } from '../server/config/database.js'; // adjust path if needed
+import { connectDatabase } from './config/database.js'; // fixed relative path
 
 // Import routes
-import authRoutes from '../server/routes/auth.js';
-import tripRoutes from '../server/routes/trips.js';
-import integrationRoutes from '../server/routes/integrations.js';
-import suggestionRoutes from '../server/routes/suggestions.js';
+import authRoutes from './routes/auth.js';
+import tripRoutes from './routes/trips.js';
+import integrationRoutes from './routes/integrations.js';
+import suggestionRoutes from './routes/suggestions.js';
 
 // Load environment variables
 dotenv.config();
@@ -19,7 +21,7 @@ const app = express();
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*',
+  origin: process.env.FRONTEND_URL || '*', // production frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -35,7 +37,7 @@ app.use('/api/integrations', integrationRoutes);
 app.use('/api/suggestions', suggestionRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ message: 'EasyTrip API is running!' });
 });
 
@@ -45,13 +47,13 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ message: 'API route not found' });
 });
 
-// Connect to DB
+// Connect to Database
 connectDatabase();
 
-// ✅ Export for Vercel (no app.listen)
+// Export for Vercel
 export default app;
