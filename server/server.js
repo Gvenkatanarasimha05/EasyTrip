@@ -54,16 +54,17 @@ app.use('/api/*', (req, res) => {
 
 // Connect to Database
 // Connect to Database
+// server/server.js
+
+// Connect to Database
 connectDatabase();
 
-// Local dev: start server manually
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => {
-    console.log(`🚀 EasyTrip backend running at http://localhost:${PORT}`);
-  });
-}
-export default app;
+const PORT = process.env.PORT || 3001; 
+app.listen(PORT, () => {
+  console.log(`🚀 EasyTrip backend running at port ${PORT}`);
+});
+
+export default app; 
 
 
 
