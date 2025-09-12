@@ -53,7 +53,16 @@ app.use('/api/*', (req, res) => {
 });
 
 // Connect to Database
+// Connect to Database
 connectDatabase();
 
-// Export for Vercel
-export default app;
+// Local dev: start server manually
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`🚀 EasyTrip backend running at http://localhost:${PORT}`);
+  });
+}
+
+
+
