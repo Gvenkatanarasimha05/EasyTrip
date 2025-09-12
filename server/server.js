@@ -3,31 +3,27 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { connectDatabase } from './config/database.js';
+import { connectDatabase } from '../server/config/database.js'; // adjust path if needed
 
 // Import routes
-import authRoutes from './routes/auth.js';
-import tripRoutes from './routes/trips.js';
-import integrationRoutes from './routes/integrations.js';
-import suggestionRoutes from './routes/suggestions.js';
+import authRoutes from '../server/routes/auth.js';
+import tripRoutes from '../server/routes/trips.js';
+import integrationRoutes from '../server/routes/integrations.js';
+import suggestionRoutes from '../server/routes/suggestions.js';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(helmet());
-
-
 app.use(cors({
-  origin: ['https://easytrip11.vercel.app', 'http://localhost:3001'],
-  methods: ['GET', 'POST', 'OPTIONS'],
+  origin: process.env.CLIENT_URL || '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-
 app.use(morgan('combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -54,9 +50,8 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-connectDatabase().then(() => {
-  app.listen(PORT, () => {
-    console.log(`🚀 EasyTrip server is running on port ${PORT}`);
-    console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  });
-});
+// Connect to DB
+connectDatabase();
+
+// ✅ Export for Vercel (no app.listen)
+export default app;

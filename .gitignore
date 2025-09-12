@@ -1,7 +1,6 @@
 # Node modules
-
 client/node_modules/
-
+server/node_modules/
 
 # Build output
 dist/
@@ -18,8 +17,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Environment files
-
+# Environment variables
+.env
+server/.env
+client/.env
 *.local
 
 # Editor directories and files
@@ -33,7 +34,7 @@ lerna-debug.log*
 *.sln
 *.sw?
 
-# Optional: ignore coverage reports (if using testing)
+# Coverage reports
 coverage/
 client/coverage/
 server/coverage/

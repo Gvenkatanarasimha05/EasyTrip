@@ -8,7 +8,7 @@ import { useTheme } from '../contexts/ThemeContext';
 export const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, isLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
@@ -16,7 +16,6 @@ export const Header: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -42,25 +41,23 @@ export const Header: React.FC = () => {
             >
               <MapPin className="w-6 h-6 text-white" />
             </motion.div>
-            <span className={`text-xl font-bold ${
-              isScrolled || !isHomePage
-                ? 'text-gray-900 dark:text-white'
-                : 'text-white'
-            }`}>
+            <span
+              className={`text-xl font-bold ${
+                isScrolled || !isHomePage ? 'text-gray-900 dark:text-white' : 'text-white'
+              }`}
+            >
               EasyTrip
             </span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {isAuthenticated ? (
+            {!isLoading && isAuthenticated ? (
               <>
                 <Link
                   to="/dashboard"
                   className={`hover:text-blue-600 transition-colors ${
-                    isScrolled || !isHomePage
-                      ? 'text-gray-700 dark:text-gray-300'
-                      : 'text-white'
+                    isScrolled || !isHomePage ? 'text-gray-700 dark:text-gray-300' : 'text-white'
                   }`}
                 >
                   Dashboard
@@ -68,19 +65,17 @@ export const Header: React.FC = () => {
                 <Link
                   to="/trips"
                   className={`hover:text-blue-600 transition-colors ${
-                    isScrolled || !isHomePage
-                      ? 'text-gray-700 dark:text-gray-300'
-                      : 'text-white'
+                    isScrolled || !isHomePage ? 'text-gray-700 dark:text-gray-300' : 'text-white'
                   }`}
                 >
                   My Trips
                 </Link>
                 <div className="flex items-center space-x-4">
-                  <span className={`text-sm ${
-                    isScrolled || !isHomePage
-                      ? 'text-gray-600 dark:text-gray-400'
-                      : 'text-white'
-                  }`}>
+                  <span
+                    className={`text-sm ${
+                      isScrolled || !isHomePage ? 'text-gray-600 dark:text-gray-400' : 'text-white'
+                    }`}
+                  >
                     Hi, {user?.full_name.split(' ')[0]}
                   </span>
                   <button
@@ -91,14 +86,12 @@ export const Header: React.FC = () => {
                   </button>
                 </div>
               </>
-            ) : (
+            ) : !isLoading ? (
               <>
                 <Link
                   to="/login"
                   className={`hover:text-blue-600 transition-colors ${
-                    isScrolled || !isHomePage
-                      ? 'text-gray-700 dark:text-gray-300'
-                      : 'text-white'
+                    isScrolled || !isHomePage ? 'text-gray-700 dark:text-gray-300' : 'text-white'
                   }`}
                 >
                   Login
@@ -110,6 +103,8 @@ export const Header: React.FC = () => {
                   Sign Up
                 </Link>
               </>
+            ) : (
+              <span className="text-gray-400">Loading...</span>
             )}
 
             {/* Theme Toggle */}
@@ -121,11 +116,7 @@ export const Header: React.FC = () => {
                   : 'text-white hover:bg-white/10'
               }`}
             >
-              {theme === 'light' ? (
-                <Moon className="w-5 h-5" />
-              ) : (
-                <Sun className="w-5 h-5" />
-              )}
+              {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
           </nav>
 
@@ -134,23 +125,15 @@ export const Header: React.FC = () => {
             <button
               onClick={toggleTheme}
               className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${
-                isScrolled || !isHomePage
-                  ? 'text-gray-700 dark:text-gray-300'
-                  : 'text-white hover:bg-white/10'
+                isScrolled || !isHomePage ? 'text-gray-700 dark:text-gray-300' : 'text-white hover:bg-white/10'
               }`}
             >
-              {theme === 'light' ? (
-                <Moon className="w-5 h-5" />
-              ) : (
-                <Sun className="w-5 h-5" />
-              )}
+              {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={`p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${
-                isScrolled || !isHomePage
-                  ? 'text-gray-700 dark:text-gray-300'
-                  : 'text-white hover:bg-white/10'
+                isScrolled || !isHomePage ? 'text-gray-700 dark:text-gray-300' : 'text-white hover:bg-white/10'
               }`}
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -168,7 +151,7 @@ export const Header: React.FC = () => {
           className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200 dark:border-gray-700"
         >
           <div className="px-4 py-4 space-y-4">
-            {isAuthenticated ? (
+            {!isLoading && isAuthenticated ? (
               <>
                 <Link
                   to="/dashboard"
@@ -185,9 +168,7 @@ export const Header: React.FC = () => {
                   My Trips
                 </Link>
                 <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    Hi, {user?.full_name}
-                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Hi, {user?.full_name}</p>
                   <button
                     onClick={() => {
                       logout();
@@ -199,7 +180,7 @@ export const Header: React.FC = () => {
                   </button>
                 </div>
               </>
-            ) : (
+            ) : !isLoading ? (
               <>
                 <Link
                   to="/login"
@@ -216,6 +197,8 @@ export const Header: React.FC = () => {
                   Sign Up
                 </Link>
               </>
+            ) : (
+              <span className="text-gray-400">Loading...</span>
             )}
           </div>
         </motion.div>

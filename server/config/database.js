@@ -10,8 +10,10 @@ if (!mongoUri) {
 export const connectDatabase = async () => {
   try {
     await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,      // parses the connection string correctly
+      useUnifiedTopology: true,   // avoids deprecation warnings
       serverSelectionTimeoutMS: 10000,
-      maxPoolSize: 10
+      maxPoolSize: 10,
     });
     console.log('✅ Connected to MongoDB');
   } catch (error) {
